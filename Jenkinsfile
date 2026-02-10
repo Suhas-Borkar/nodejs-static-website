@@ -2,17 +2,13 @@ pipeline {
     agent {
         docker {
             image 'node:18-alpine'
-            args '-u root'
         }
     }
 
     stages {
         stage('Check Node') {
             steps {
-                sh '''
-                  node -v
-                  npm -v
-                '''
+                sh 'node -v && npm -v'
             }
         }
 
@@ -22,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Run Application') {
+        stage('Run App') {
             steps {
                 sh 'npm start'
             }
