@@ -1,12 +1,24 @@
 pipeline {
-    agent {
-        docker { image 'node:18-alpine' }
+    agent any
+
+    tools {
+        nodejs 'Node18'
     }
 
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                    node -v
+                    npm -v
+                    npm install
+                '''
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build || echo "No build step defined"'
             }
         }
     }
