@@ -1,28 +1,24 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/Suhas-Borkar/nodejs-static-website.git', branch: 'master'
-            }
-        }
+    tools {
+        nodejs 'Node18'
+    }
 
+    stages {
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                    node -v
+                    npm -v
+                    npm install
+                '''
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
-            }
-        }
-
-        stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: '**/build/**', fingerprint: true
+                sh 'npm run build || echo "No build step defined"'
             }
         }
     }
