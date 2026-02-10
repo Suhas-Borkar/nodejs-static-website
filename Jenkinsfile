@@ -1,25 +1,30 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18-alpine'
+            args '-u root'
+        }
+    }
 
     stages {
-        stage('Install Dependencies') {
+        stage('Check Node') {
             steps {
                 sh '''
-                    node -v || echo "Node not installed"
-                    npm -v || echo "NPM not installed"
-                    npm install
+                  node -v
+                  npm -v
                 '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
             }
         }
 
         stage('Run Application') {
             steps {
-                sh '''
-                    echo "Starting Node app"
-                    node index.js &
-                    sleep 5
-                    echo "Node app executed"
-                '''
+                sh 'npm start'
             }
         }
     }
