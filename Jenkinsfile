@@ -1,16 +1,12 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18-bullseye'
-        }
-    }
+    agent any
 
     stages {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    node -v
-                    npm -v
+                    node -v || echo "Node not installed"
+                    npm -v || echo "NPM not installed"
                     npm install
                 '''
             }
@@ -19,10 +15,10 @@ pipeline {
         stage('Run Application') {
             steps {
                 sh '''
-                    echo "Starting Node application..."
+                    echo "Starting Node app"
                     node index.js &
                     sleep 5
-                    echo "App started successfully"
+                    echo "Node app executed"
                 '''
             }
         }
